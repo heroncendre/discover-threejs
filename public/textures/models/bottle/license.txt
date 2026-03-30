@@ -1,0 +1,8 @@
+Model Information:
+* title:	Small bottle
+* source:	https://sketchfab.com/3d-models/small-bottle-761e522abb934b0a98063a9851728180
+* author:	shuvalov.di (https://sketchfab.com/shuvalov.di)
+
+Model License:
+* license type:	SKETCHFAB Standard (https://sketchfab.com/licenses)
+* requirements:	Under basic restrictions, use worldwide, on all types of media, commercially or not, and in all types of derivative works

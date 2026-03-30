@@ -1,0 +1,13 @@
+# Git LFS — binaires volumineux sous public/ (glTF buffers, modèles, textures).
+# Les .gltf restent en Git classique (JSON, souvent petits et lisibles en diff).
+public/**/*.glb   filter=lfs diff=lfs merge=lfs -text
+public/**/*.bin   filter=lfs diff=lfs merge=lfs -text
+public/**/*.fbx   filter=lfs diff=lfs merge=lfs -text
+public/**/*.png   filter=lfs diff=lfs merge=lfs -text
+public/**/*.jpg   filter=lfs diff=lfs merge=lfs -text
+public/**/*.jpeg  filter=lfs diff=lfs merge=lfs -text
+public/**/*.webp  filter=lfs diff=lfs merge=lfs -text
+public/**/*.ktx2  filter=lfs diff=lfs merge=lfs -text
+public/**/*.basis filter=lfs diff=lfs merge=lfs -text
+public/**/*.hdr   filter=lfs diff=lfs merge=lfs -text
+public/**/*.exr   filter=lfs diff=lfs merge=lfs -text

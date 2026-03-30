@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Scène 2 — Multi-caméras &amp; courbe</title>
+    <link rel="stylesheet" href="/src/style.css" />
+  </head>
+  <body class="page-scene">
+    <canvas class="webgl"></canvas>
+    <nav class="scene-nav" aria-label="Navigation">
+      <a class="back-link" href="/index.html">← Accueil</a>
+      <a class="debug-link" href="/scene02.html#debug">Debug</a>
+    </nav>
+    <p class="debug-hint">
+      Choix des caméras : ajoutez <code>#debug</code> à l’URL. Clic sur un objet : les caméras 1 et 2
+      suivent sa cible (<code>lookAt</code>).
+    </p>
+    <script type="module" src="/src/scenes/scene02/scene.js"></script>
+  </body>
+</html>
