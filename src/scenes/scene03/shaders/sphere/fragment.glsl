@@ -13,9 +13,10 @@ void main() {
   float diffuse = max(dot(n, l), 0.0);
 
   vec3 viewDir = normalize(cameraPosition - vWorldPosition);
-  float fresnel = pow(1.0 - max(dot(n, viewDir), 0.0), 1.0);
+  float fresnel = pow(1.0 - max(dot(n, viewDir), 0.0), 0.4);
 
-  vec3 color = vec3(1.);//(uAmbientColor + diffuse) * uBaseColor;
+  vec3 color = vec3(uBaseColor);
   float alpha = 1.0 - fresnel;
+
   gl_FragColor = vec4(color, alpha);
 }
