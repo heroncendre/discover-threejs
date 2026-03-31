@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Scène 6 — GLB loader + arbre de noeuds</title>
+    <link rel="stylesheet" href="/src/style.css" />
+  </head>
+  <body class="page-scene scene06-page">
+    <section class="scene06-left" data-scene06-left>
+      <canvas class="webgl scene06-webgl"></canvas>
+      <div class="scene06-dropzone" data-scene06-dropzone>
+        <p>Déposez un fichier <code>.glb</code> ici</p>
+      </div>
+    </section>
+
+    <aside class="scene06-right">
+      <nav class="scene-nav" aria-label="Navigation">
+        <a class="back-link" href="/index.html">← Accueil</a>
+        <a class="debug-link" href="/scene06.html#debug">Debug</a>
+      </nav>
+      <h2 class="scene06-title">Arborescence du modèle</h2>
+      <section class="scene06-modes" aria-label="Mode de draw">
+        <button class="scene06-modes__btn scene06-modes__btn--active" data-scene06-mode-btn="triangles">
+          triangles
+        </button>
+        <button class="scene06-modes__btn" data-scene06-mode-btn="lines">lines</button>
+        <button class="scene06-modes__btn" data-scene06-mode-btn="points">points</button>
+      </section>
+      <div class="scene06-tree" data-scene06-tree></div>
+    </aside>
+
+    <script type="module" src="/src/scenes/scene06/scene.js"></script>
+  </body>
+</html>

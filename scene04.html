@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Scène 4 — Draw calls</title>
+    <link rel="stylesheet" href="/src/style.css" />
+  </head>
+  <body class="page-scene">
+    <canvas class="webgl"></canvas>
+    <nav class="scene-nav" aria-label="Navigation">
+      <a class="back-link" href="/index.html">← Accueil</a>
+      <a class="debug-link" href="/scene04.html#debug">Debug</a>
+    </nav>
+
+    <section class="scene04-controls" aria-label="Contrôles draw calls">
+      <p class="scene04-controls__title">Draw calls lab</p>
+      <div class="scene04-controls__modes">
+        <button class="scene04-controls__mode-btn scene04-controls__mode-btn--active" data-scene04-mode-btn="meshes">meshes</button>
+        <button class="scene04-controls__mode-btn" data-scene04-mode-btn="oneMesh">one mesh</button>
+        <button class="scene04-controls__mode-btn" data-scene04-mode-btn="instancedMesh">instanced mesh</button>
+      </div>
+
+      <label class="scene04-controls__slider-wrap">
+        Triangles
+        <input data-scene04-slider type="range" min="100" max="12000" step="100" value="2000" />
+      </label>
+
+      <p class="scene04-controls__stats">
+        Mode: <strong data-scene04-mode>meshes</strong><br />
+        Triangles: <strong data-scene04-count>2 000</strong><br />
+        Draw calls: <strong data-scene04-calls>0</strong><br />
+        FPS: <strong data-scene04-fps>0</strong>
+      </p>
+    </section>
+
+    <p class="debug-hint">
+      Compare les stratégies de rendu: <code>meshes</code>, <code>one mesh</code>,
+      <code>instanced mesh</code>.
+    </p>
+    <script type="module" src="/src/scenes/scene04/scene.js"></script>
+  </body>
+</html>
