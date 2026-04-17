@@ -1,11 +1,20 @@
 # Discover Three.js
 
-Site didactique avec **homepage** et **scènes** (niveaux) en [Three.js](https://threejs.org/). L’architecture suit la synthèse *Code structuring for bigger projects* (three.js journey) : singleton **`Experience`**, **`Camera`** / **`Renderer`** / **`World`**, **`sources.js`** + **`Resources`**, **`Utils/`** (`EventEmitter`, `Sizes`, `Time`, `Debug`), et **`World`** découpé en composants (`Floor`, `Subjects`, `Environment`, panneaux debug).
+Site didactique composé de 9 scènes progressives en [Three.js](https://threejs.org/) (caméras, shaders, collisions, post-process, shadow maps, etc.).
+
+L’architecture principale suit le pattern `Experience` :
+
+- singleton `Experience`,
+- séparation `Camera` / `Renderer` / `World`,
+- `Resources` + `sources.js`,
+- `Utils` (`Sizes`, `Time`, `EventEmitter`, `Debug`).
+
+Chaque scène possède son propre dossier et désormais un document pédagogique `IMPLEMENTATION.md`.
 
 ## Prérequis
 
 - [Node.js](https://nodejs.org/) 18+
-- [Git LFS](https://git-lfs.com/) — requis pour cloner les assets sous `public/` (textures, `.glb`, `.bin`, `.fbx`, etc.). Après installation : `git lfs install` une fois sur la machine.
+- [Git LFS](https://git-lfs.com/) (requis pour les assets dans `public/`)
 
 ### Cloner le dépôt
 
@@ -13,96 +22,107 @@ Site didactique avec **homepage** et **scènes** (niveaux) en [Three.js](https:/
 git lfs install
 git clone <url-du-depot>
 cd discover-threejs
-git lfs pull   # si besoin, pour récupérer les pointeurs LFS
+git lfs pull
 ```
-
-Sans Git LFS, les gros fichiers apparaîtront comme de petits fichiers texte (pointeurs) et le projet ne fonctionnera pas correctement.
 
 ## Scripts
 
 ```bash
 npm install
-npm run dev      # dev server (Vite)
-npm run build    # sortie dans dist/
-npm run preview  # prévisualiser la build
+npm run dev
+npm run build
+npm run preview
 ```
 
-## Structure
+## Scènes (aperçu + documentation)
 
-- `index.html` — accueil et liens vers les scènes
-- `scene01.html` — scène 1 : `src/scenes/scene01/scene.js` instancie `Experience(canvas, World)` ; le monde est dans `src/scenes/scene01/World/`
-- `scene02.html` — scène 2 : `Experience(canvas, World, { camerasFactory })` ; multi-caméras dans `src/scenes/scene02/World/Scene02Cameras.js`
-- `src/Experience/` — cœur WebGL : `Experience.js`, `Camera.js`, `Renderer.js`, `sources.js`, `Utils/` (pas de `World` ici : chaque scène fournit son propre `World`)
-- **lil-gui** : actif uniquement si l’URL contient **`#debug`** (comme dans le cours). Matcaps : fichiers `public/textures/matcap/matcap-1.png` … `matcap-4.png` (voir `Experience/sources.js`).
-- **Scène 2 — glTF** : chemins dans `public/textures/models/` (voir `Experience/sources.js`) — bouteille, violon, roue à eau, etc. Bouton **GLTF Viewer** dans le panneau `#debug` → [glTF Viewer](https://gltf-viewer.donmccurdy.com/). Les gros binaires sont suivis avec **Git LFS** (voir `.gitattributes`).
+- **Scène 01 — Matériaux & lumières**  
+  Sol, sujets, environnement lumineux, première approche `World` modulaire.  
+  [En savoir plus](./src/scenes/scene01/IMPLEMENTATION.md)
 
-Arborescence cible (rappel cours) :
+- **Scène 02 — Multi-caméras & spline**  
+  3 caméras, raycaster de sélection, bille animée sur courbe fermée, chargement glTF.  
+  [En savoir plus](./src/scenes/scene02/IMPLEMENTATION.md)
 
-```text
-src/Experience/
-├── Experience.js
-├── Camera.js
-├── Renderer.js
-├── sources.js
-└── Utils/
-    ├── EventEmitter.js
-    ├── Sizes.js
-    ├── Time.js
-    ├── Resources.js
-    ├── Debug.js
-    └── createCheckerboardTexture.js
+- **Scène 03 — Shader custom**  
+  `ShaderMaterial` GLSL, uniforms pilotées, changement de géométrie en temps réel.  
+  [En savoir plus](./src/scenes/scene03/IMPLEMENTATION.md)
 
-src/scenes/scene01/
-├── scene.js
-└── World/
-    ├── World.js
-    ├── Environment.js
-    ├── Floor.js
-    ├── Subjects.js
-    ├── Materials.js
-    └── WorldDebug.js
+- **Scène 04 — Draw calls lab**  
+  Comparaison `meshes` vs `one mesh` vs `instanced mesh`, instrumentation FPS et render calls.  
+  [En savoir plus](./src/scenes/scene04/IMPLEMENTATION.md)
 
-src/scenes/scene02/
-├── scene.js
-└── World/
-    ├── World.js
-    ├── Floor.js
-    ├── Subjects.js
-    ├── Ball.js
-    ├── Environment.js
-    ├── Scene02Cameras.js
-    └── WorldDebug.js
-```
+- **Scène 05 — Labyrinthe POV**  
+  Contrôleur FPS, collisions grille/cercle, post-process jour/nuit/IR, mini-map HUD.  
+  [En savoir plus](./src/scenes/scene05/IMPLEMENTATION.md)
+
+- **Scène 06 — GLB loader & node tree**  
+  Drag-and-drop GLB, inspection hiérarchie, pulsation de nœuds, modes triangles/lines/points.  
+  [En savoir plus](./src/scenes/scene06/IMPLEMENTATION.md)
+
+- **Scène 07 — Points & tessellation**  
+  Transition animée entre modes de rendu, densification de nuage de points, contrôle temporal.  
+  [En savoir plus](./src/scenes/scene07/IMPLEMENTATION.md)
+
+- **Scène 08 — Shadow maps**  
+  Démonstration didactique des ombres directionnelles, frustum d’ombre, type de filtre, map size POT.  
+  [En savoir plus](./src/scenes/scene08/IMPLEMENTATION.md)
+
+- **Scène 09 — Terrain procédural FPS**  
+  Terrain continu, immeubles procéduraux, collisions `Octree + Capsule`, mini-map HUD.  
+  [En savoir plus](./src/scenes/scene09/IMPLEMENTATION.md)
+
+## Structure (raccourci)
+
+- `index.html` : navigation entre scènes
+- `scene01.html` … `scene09.html` : pages d’entrée
+- `src/Experience/` : moteur commun
+- `src/scenes/sceneXX/` : logique spécifique de chaque niveau
 
 ## GitHub & Git LFS
 
-Les règles LFS sont dans `.gitattributes` (préfixe `public/**/` : `.glb`, `.bin`, textures image, `.fbx`, etc.). Les fichiers `.gltf` et `.txt` (licences) restent en Git normal.
-
-Premier envoi :
+Les règles LFS sont définies dans `.gitattributes` pour les assets lourds (`.glb`, `.bin`, textures, `.fbx`, etc.).
 
 ```bash
 git lfs install
 git add .
 git commit -m "Initial commit"
-git remote add origin <url>
 git push -u origin main
 ```
 
-Sur GitHub, l’onglet du dépôt indique la présence de contenu LFS ; les [quotas LFS](https://docs.github.com/en/repositories/working-with-files/managing-large-files/about-git-large-file-storage) s’appliquent au-delà du volume gratuit.
-
 ## Déploiement (GitHub Pages)
 
-Pour un dépôt `https://<user>.github.io/<repo>/`, définir dans `vite.config.js` :
+Pour un dépôt `https://<user>.github.io/<repo>/`, définir `base` dans `vite.config.js` :
 
 ```js
 export default {
   base: '/<repo>/',
-  // ...
 }
 ```
 
-Puis build et publier le contenu de `dist/` sur la branche `gh-pages` (ou action GitHub Pages).
+Puis publier `dist/` (branche `gh-pages` ou workflow GitHub Pages).
 
-## Licence
+## Assets et licences
+
+### Assets référencés dans `sources.js`
+
+- **Small bottle** (Sketchfab)  
+  Source : [small-bottle-761e522abb934b0a98063a9851728180](https://sketchfab.com/3d-models/small-bottle-761e522abb934b0a98063a9851728180)  
+  Licence locale : `public/models/bottle/license.txt` (Sketchfab Standard)
+
+- **Classic acoustic violin** (Sketchfab)  
+  Source : [classic-acoustic-violin-48ee34ec0f4842dfae25414f6f25a62d](https://sketchfab.com/3d-models/classic-acoustic-violin-48ee34ec0f4842dfae25414f6f25a62d)  
+  Note : pas de fichier de licence dédié dans le repo ; vérifier la licence sur la page source.
+
+- **Water wheel** (Sketchfab)  
+  Source : [water-wheel-da4e000e36f1484aa1fbf9f042e82401](https://sketchfab.com/3d-models/water-wheel-da4e000e36f1484aa1fbf9f042e82401)  
+  Licence locale : `public/models/water_wheel/license.txt` (CC-BY-4.0, crédit auteur requis)
+
+### Textures matcap
+
+- Fichiers : `public/textures/matcap/matcap-1.png` à `matcap-4.png`
+- Vérifier les droits d’usage selon la source d’origine des textures si redistribution publique.
+
+## Licence du projet
 
 Projet d’apprentissage — adaptez librement.
