@@ -1,6 +1,9 @@
 import * as THREE from 'three'
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js'
 
+/**
+ * Scène 04 (draw calls) : FOV légèrement plus serré (42°), `far` plus grand pour la scène étendue.
+ */
 export default class Scene04Camera {
   /**
    * @param {import('../../../Experience/Experience.js').default} experience
@@ -10,6 +13,9 @@ export default class Scene04Camera {
     this.sizes = experience.sizes
     this.scene = experience.scene
     this.canvas = experience.canvas
+
+    this._onResize = () => this.resize()
+    this.sizes.on('resize', this._onResize)
 
     this.instance = new THREE.PerspectiveCamera(42, this.sizes.width / this.sizes.height, 0.1, 140)
     this.instance.position.set(5.2, 4.2, 5.8)
@@ -36,5 +42,9 @@ export default class Scene04Camera {
 
   dispose() {
     this.controls.dispose()
+  }
+
+  destroy() {
+    this.sizes.off('resize', this._onResize)
   }
 }

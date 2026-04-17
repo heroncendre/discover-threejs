@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Scène 8 — Shadow maps</title>
+    <link rel="stylesheet" href="/src/style.css" />
+  </head>
+  <body class="page-scene">
+    <canvas class="webgl"></canvas>
+    <nav class="scene-nav" aria-label="Navigation">
+      <a class="back-link" href="/index.html">← Accueil</a>
+      <a class="debug-link" href="/scene08.html#debug">Debug</a>
+    </nav>
+    <p class="debug-hint">
+      Shadow maps : ajoutez <code>#debug</code> à l’URL pour le type d’ombre du renderer, le frustum
+      orthographique (near/far, gauche/droite/haut/bas), la taille de texture POT et le lien des quatre
+      côtés. La scène reprend le décor de la scène 2 ; la lumière directionnelle a un helper orange et le
+      frustum de la caméra d’ombre est dessiné en multicolore.
+    </p>
+    <script type="module" src="/src/scenes/scene08/scene.js"></script>
+  </body>
+</html>

@@ -10,6 +10,28 @@ import Renderer from './Renderer.js'
 let instance = null
 
 /**
+ * ---------------------------------------------------------------------------
+ * PerspectiveCamera dans ce dépôt — pourquoi plusieurs façons de l’instancier ?
+ * ---------------------------------------------------------------------------
+ *
+ * `THREE.PerspectiveCamera(fov, aspect, near, far)` :
+ * - **fov** : angle vertical en degrés (souvent 40–55 pour une vue “propre”, plus large pour FPS ou effet immersif).
+ * - **aspect** : largeur / hauteur du **viewport de rendu** (canvas). Doit suivre le redimensionnement, sinon l’image est étirée.
+ * - **near / far** : plans de découpe profondeur. `near` trop petit → artefacts de précision z ; `far` trop petit → la scène est coupée au loin.
+ *
+ * **1) Caméra par défaut (`new Camera()` dans Experience)**  
+ * Utilisée quand aucune `camerasFactory` n’est fournie (ex. scène 01, gabarit générique).  
+ * La classe `Camera` crée une `PerspectiveCamera` avec `this.sizes.aspect` et **s’abonne elle-même** à `sizes` pour mettre à jour `aspect` au resize. C’est le modèle “une caméra Orbit + Experience”.
+ *
+ * **2) `camerasFactory(experience)` (scènes 02–05, etc.)**  
+ * Quand la scène impose une caméra dédiée (FOV différent, multi-cam, pas d’Orbit, etc.).  
+ * L’objet retourné expose `instance`, `resize()`, `update()`, et doit **s’abonner à `experience.sizes`** pour le resize (comme `Camera` / `Renderer`), et implémenter `destroy()` pour se désabonner + libérer les contrôles si besoin.
+ *
+ * **3) Scripts de scène autonomes (ex. scene06, scene07)**  
+ * Pas de singleton `Experience` : le module crée directement `new THREE.PerspectiveCamera(...)` et branche `window.addEventListener('resize', …)` (ou équivalent) sur le canvas plein écran. Utile pour une page HTML isolée sans boucle Experience.
+ *
+ * **Resize** : `Sizes` émet `resize` quand la fenêtre change. Chaque composant qui dépend de la taille (renderer, caméra, etc.) **écoute `sizes` et applique sa propre mise à jour** — `Experience` ne centralise plus le resize.
+ *
  * @typedef {{
  *   camerasFactory?: (experience: Experience) => {
  *     instance: THREE.Camera
@@ -17,6 +39,7 @@ let instance = null
  *     update: () => void
  *     controls?: { dispose: () => void }
  *     dispose?: () => void
+ *     destroy?: () => void
  *   }
  * }} ExperienceOptions
  */
@@ -53,15 +76,8 @@ export default class Experience {
 
     this.renderer = new Renderer()
 
-    this._onResize = () => this.resize()
     this._onTick = () => this.update()
-    this.sizes.on('resize', this._onResize)
     this.time.on('tick', this._onTick)
-  }
-
-  resize() {
-    this.camera.resize()
-    this.renderer.resize()
   }
 
   update() {
@@ -71,7 +87,6 @@ export default class Experience {
   }
 
   destroy() {
-    this.sizes.off('resize', this._onResize)
     this.time.off('tick', this._onTick)
 
     this.scene.traverse((child) => {
@@ -88,8 +103,20 @@ export default class Experience {
     } else {
       this.camera.controls?.dispose()
     }
+    this.camera.destroy?.()
+    this.renderer.destroy()
     this.renderer.instance.dispose()
     this.debug.destroy()
     instance = null
   }
+}
+
+// Vite HMR : sans teardown, le singleton `instance` survit et le prochain
+// `new Experience()` retourne l’ancienne instance (souvent déjà détruite) → écran noir.
+if (import.meta.hot) {
+  import.meta.hot.dispose(() => {
+    if (instance) {
+      instance.destroy()
+    }
+  })
 }

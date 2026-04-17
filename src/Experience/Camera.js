@@ -1,27 +1,41 @@
 import * as THREE from 'three'
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js'
 import Experience from './Experience.js'
+import EventEmitter from './Utils/EventEmitter.js'
 
-export default class Camera {
+/**
+ * Caméra par défaut de l’Experience (quand aucune `camerasFactory` n’est fournie).
+ *
+ * - **PerspectiveCamera** : FOV 45°, `aspect` synchronisé avec `Sizes` (viewport = fenêtre).
+ * - **Quand l’utiliser** : scènes “génériques” (ex. scène 01) ou démo template ; une seule caméra orbit.
+ * - **Resize** : cette classe écoute `experience.sizes` et met à jour `aspect` + `updateProjectionMatrix`.
+ */
+export default class Camera extends EventEmitter {
   constructor() {
+    super()
     this.experience = new Experience()
     this.sizes = this.experience.sizes
     this.scene = this.experience.scene
     this.canvas = this.experience.canvas
+
+    this._onResize = () => this.resize()
 
     this.setInstance()
     this.setControls()
   }
 
   setInstance() {
+    // fov° | aspect dynamique | près | loin — voir bloc doc dans Experience.js
     this.instance = new THREE.PerspectiveCamera(
       45,
-      this.sizes.width / this.sizes.height,
+      this.sizes.aspect,
       0.1,
       100,
     )
     this.instance.position.set(7, 5.5, 9)
     this.scene.add(this.instance)
+
+    this.sizes.on('resize', this._onResize)
   }
 
   setControls() {
@@ -37,11 +51,15 @@ export default class Camera {
   }
 
   resize() {
-    this.instance.aspect = this.sizes.width / this.sizes.height
+    this.instance.aspect = this.sizes.aspect
     this.instance.updateProjectionMatrix()
   }
 
   update() {
     this.controls.update()
+  }
+
+  destroy() {
+    this.sizes.off('resize', this._onResize)
   }
 }

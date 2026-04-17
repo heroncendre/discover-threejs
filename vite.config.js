@@ -16,6 +16,8 @@ export default {
         scene05: resolve(root, 'scene05.html'),
         scene06: resolve(root, 'scene06.html'),
         scene07: resolve(root, 'scene07.html'),
+        scene08: resolve(root, 'scene08.html'),
+        scene09: resolve(root, 'scene09.html'),
       },
     },
   },

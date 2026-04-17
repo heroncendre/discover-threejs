@@ -18,6 +18,7 @@ renderer.shadowMap.enabled = true
 const scene = new THREE.Scene()
 scene.background = new THREE.Color('#090b12')
 
+// Hors Experience : page full canvas ; `resize()` aligne aspect + renderer sur `window`.
 const camera = new THREE.PerspectiveCamera(45, 1, 0.1, 200)
 camera.position.set(3.4, 2.2, 4.4)
 scene.add(camera)

@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Scène 9 — Terrain procédural FPS</title>
+    <link rel="stylesheet" href="/src/style.css" />
+  </head>
+  <body class="page-scene">
+    <canvas class="webgl"></canvas>
+    <nav class="scene-nav" aria-label="Navigation">
+      <a class="back-link" href="/index.html">← Accueil</a>
+      <a class="debug-link" href="/scene09.html#debug">Debug</a>
+    </nav>
+    <section class="scene05-hud" aria-label="Mini map">
+      <canvas data-scene09-hud-map width="220" height="150"></canvas>
+    </section>
+    <p class="debug-hint scene05-help" data-scene09-help>
+      Cliquez dans le canvas pour verrouiller la souris, puis déplacez-vous avec <code>WASD</code>.
+      <code>Space</code> saute. Les collisions sont gérées par <code>Octree</code> contre le terrain et
+      les immeubles.
+    </p>
+    <script type="module" src="/src/scenes/scene09/scene.js"></script>
+  </body>
+</html>

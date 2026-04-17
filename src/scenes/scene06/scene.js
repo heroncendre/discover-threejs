@@ -28,6 +28,7 @@ renderer.shadowMap.enabled = true
 const scene = new THREE.Scene()
 scene.background = new THREE.Color('#090b12')
 
+// Hors Experience : caméra locale. L’aspect suit le **panneau gauche** (split UI), pas `window` — voir `resize()`.
 const camera = new THREE.PerspectiveCamera(45, 1, 0.1, 200)
 camera.position.set(3.4, 2.2, 4.4)
 scene.add(camera)

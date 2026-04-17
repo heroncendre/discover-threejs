@@ -3,6 +3,10 @@ import { OrbitControls } from 'three/addons/controls/OrbitControls.js'
 
 /**
  * 3 caméras + orbit (cam 1), suivi bille (cam 2), plan orthographique (cam 3).
+ *
+ * Les deux `PerspectiveCamera` sont créées avec **aspect = 1** puis mises à jour dans `resize()`
+ * avec `sizes` (largeur / hauteur fenêtre). La ortho est recalée sur le même aspect.
+ * **Écoute `sizes`** pour tout recalcul au redimensionnement.
  */
 export default class Scene02Cameras {
   /**
@@ -43,6 +47,10 @@ export default class Scene02Cameras {
     this.orbit.autoRotateSpeed = 0.28
     this.orbit.minDistance = 6
     this.orbit.maxDistance = 48
+
+    this._onResize = () => this.resize()
+    this.sizes.on('resize', this._onResize)
+    this.resize()
 
     experience.resources.on('ready', () => this._onReady())
   }
@@ -155,5 +163,9 @@ export default class Scene02Cameras {
 
   dispose() {
     this.orbit.dispose()
+  }
+
+  destroy() {
+    this.sizes.off('resize', this._onResize)
   }
 }

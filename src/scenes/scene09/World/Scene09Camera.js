@@ -1,9 +1,6 @@
 import * as THREE from 'three'
 
-/**
- * Scène 05 (labyrinthe POV) : FOV **large** (70°) type FPS ; `aspect` initialisé à 1 puis corrigé au resize.
- */
-export default class Scene05Camera {
+export default class Scene09Camera {
   /**
    * @param {import('../../../Experience/Experience.js').default} experience
    */
@@ -15,9 +12,10 @@ export default class Scene05Camera {
     this._onResize = () => this.resize()
     this.sizes.on('resize', this._onResize)
 
-    this.instance = new THREE.PerspectiveCamera(70, 1, 0.05, 200)
-    this.instance.position.set(0, 1.65, 0)
+    this.instance = new THREE.PerspectiveCamera(75, 1, 0.05, 400)
+    this.instance.position.set(0, 1.7, 0)
     this.scene.add(this.instance)
+    this.resize()
   }
 
   resize() {

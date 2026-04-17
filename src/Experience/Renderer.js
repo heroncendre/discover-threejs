@@ -1,6 +1,10 @@
 import * as THREE from 'three'
 import Experience from './Experience.js'
 
+/**
+ * Rendu WebGL : taille du canvas et pixel ratio suivent `Sizes`.
+ * S’abonne à `sizes` pour `setSize` / `setPixelRatio` au resize (responsabilité locale).
+ */
 export default class Renderer {
   constructor() {
     this.experience = new Experience()
@@ -9,7 +13,12 @@ export default class Renderer {
     this.scene = this.experience.scene
     this.camera = this.experience.camera
 
+    // Créer le WebGLRenderer avant de s’abonner au resize : un `resize` très tôt
+    // (certains environnements) ne doit pas appeler setSize avant que `instance` existe.
     this.setInstance()
+
+    this._onResize = () => this.resize()
+    this.sizes.on('resize', this._onResize)
   }
 
   setInstance() {
@@ -29,11 +38,16 @@ export default class Renderer {
   }
 
   resize() {
+    if (!this.instance) return
     this.instance.setSize(this.sizes.width, this.sizes.height)
     this.instance.setPixelRatio(this.sizes.pixelRatio)
   }
 
   update() {
     this.instance.render(this.scene, this.camera.instance)
+  }
+
+  destroy() {
+    this.sizes.off('resize', this._onResize)
   }
 }
